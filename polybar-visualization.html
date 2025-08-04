@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polybar Visualization - Riceify</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            color: #c5c8d6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .polybar {
+            background: #282a2e;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .polybar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .modules-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modules-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .workspace {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .workspace.active {
+            background: #81a2be;
+            color: #1a1a1a;
+        }
+
+        .workspace.occupied {
+            color: #c5c8d6;
+        }
+
+        .workspace.empty {
+            color: #373b41;
+        }
+
+        .workspace.urgent {
+            background: #cc6666;
+            color: #1a1a1a;
+        }
+
+        .window-title {
+            color: #c5c8d6;
+            font-size: 10px;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .riceify {
+            background: #282a2e;
+            color: #f0c674;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .riceify:hover {
+            background: #f0c674;
+            color: #1a1a1a;
+        }
+
+        .system-module {
+            color: #c5c8d6;
+            font-size: 10px;
+        }
+
+        .system-module .prefix {
+            color: #f0c674;
+        }
+
+        .date {
+            color: #b5bd68;
+            font-size: 10px;
+        }
+
+        .description {
+            background: rgba(40, 42, 46, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .description h3 {
+            color: #f0c674;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .description p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .description ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .description li {
+            margin-bottom: 5px;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .demo-content {
+            background: rgba(40, 42, 46, 0.6);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-content h4 {
+            color: #f0c674;
+            margin-bottom: 10px;
+        }
+
+        .demo-text {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #f0c674; margin-bottom: 30px; font-size: 24px;">
+            🍚 Riceify Polybar Visualization
+        </h1>
+
+        <!-- Polybar Visualization -->
+        <div class="polybar">
+            <div class="modules-left">
+                <!-- Workspaces -->
+                <div class="workspace active">1</div>
+                <div class="workspace occupied">2</div>
+                <div class="workspace empty">3</div>
+                <div class="workspace occupied">4</div>
+                <div class="workspace urgent">5</div>
+                
+                <!-- Window Title -->
+                <div class="window-title">Cursor - polybar-visualization.html</div>
+                
+                <!-- Riceify Module -->
+                <div class="riceify">🍚 dark-theme (3)</div>
+            </div>
+            
+            <div class="modules-right">
+                <!-- System Modules -->
+                <div class="system-module">
+                    <span class="prefix">VOL</span> 75%
+                </div>
+                
+                <div class="system-module">
+                    <span class="prefix">RAM</span> 45%
+                </div>
+                
+                <div class="system-module">
+                    <span class="prefix">CPU</span> 23%
+                </div>
+                
+                <div class="system-module">
+                    <span class="prefix">/</span> 67%
+                </div>
+                
+                <div class="date">14:32</div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>🎨 Polybar Configuration Overview</h3>
+            <p>This visualization shows how your Riceify polybar configuration would appear on your desktop. The bar features:</p>
+            
+            <ul>
+                <li><strong>Dark theme</strong> with rounded corners (6px radius)</li>
+                <li><strong>JetBrains Mono Nerd Font</strong> for consistent typography</li>
+                <li><strong>24pt height</strong> for optimal visibility</li>
+                <li><strong>Riceify integration</strong> with rice management capabilities</li>
+            </ul>
+
+            <h4 style="color: #f0c674; margin-top: 20px;">Left Modules:</h4>
+            <ul>
+                <li><strong>Workspaces:</strong> Shows active, occupied, empty, and urgent workspaces</li>
+                <li><strong>Window Title:</strong> Displays current window title (truncated to 60 chars)</li>
+                <li><strong>Riceify:</strong> Shows current rice and total count (🍚 dark-theme (3))</li>
+            </ul>
+
+            <h4 style="color: #f0c674; margin-top: 20px;">Right Modules:</h4>
+            <ul>
+                <li><strong>Volume:</strong> PulseAudio volume with mute detection</li>
+                <li><strong>Memory:</strong> RAM usage percentage</li>
+                <li><strong>CPU:</strong> CPU usage percentage</li>
+                <li><strong>Filesystem:</strong> Root partition usage</li>
+                <li><strong>Date:</strong> Current time (HH:MM format)</li>
+            </ul>
+
+            <div class="color-palette">
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #282a2e;"></div>
+                    <span>Background</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #c5c8d6;"></div>
+                    <span>Foreground</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #f0c674;"></div>
+                    <span>Accent</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #81a2be;"></div>
+                    <span>Active</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #cc6666;"></div>
+                    <span>Urgent</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #b5bd68;"></div>
+                    <span>Date</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-content">
+            <h4>🍚 Riceify Features</h4>
+            <div class="demo-text">
+                <p><strong>Click Left:</strong> Opens rice management menu</p>
+                <p><strong>Click Right:</strong> Opens rofi rice selector</p>
+                <p><strong>Status Display:</strong> Shows current rice name and total count</p>
+                <p><strong>Rice Management:</strong> Add, switch, remove, and list rice configurations</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
